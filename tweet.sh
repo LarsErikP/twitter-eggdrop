@@ -26,7 +26,7 @@ function userexist()   {		# Checks if the user exists
 	fi
 }
 
-function gethashtag()   {		# Fetch the last three tweets wich contains the given hashtag
+function gethashtag()   {		# Fetch the last $TWEETS tweets wich contains the given hashtag
 	tag=$(echo $1 |cut -d'#' -f2) 	# Get the keyword
    tags=()
 	users=()
@@ -39,7 +39,7 @@ function gethashtag()   {		# Fetch the last three tweets wich contains the given
 	done < <(curl -s "https://search.twitter.com/search.json?q=%23${tag}&rpp=${TWEETS}" | python -mjson.tool | egrep -w 'from_user|text' | sed 's/^\s*//' | tr -d ",$") 
    # Strip leading spaces and trailing commas
    
-	# Store usernames (and remove the json-stuff)
+	# Store usernames and corresponding tweets (and remove the json-stuff)
 	for i in $(seq 1 $TWEETS); do
 		users[$i]=$(echo "${tags["$i*2-1"]}" | tr -d "\"" | sed 's/from_user://')
    	tweets[$i]=$(echo "${tags["$i*2"]}" | sed 's/"text"://')
