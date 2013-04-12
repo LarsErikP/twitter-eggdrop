@@ -1,7 +1,7 @@
 #!/bin/bash
 
 user=$1
-TWEETS=3 # Currently not in use
+TWEETS=3 # Amount of tweets to load, when fetching a hashtag
 
 ############################### Functions ################################################
 
@@ -40,15 +40,11 @@ function gethashtag()   {		# Fetch the last three tweets wich contains the given
    # Strip leading spaces and trailing commas
    
 	# Store usernames (and remove the json-stuff)
-	users[1]=$(echo "${tags[1]}" | tr -d "\"" | sed 's/from_user://')
-   users[2]=$(echo "${tags[3]}" | tr -d "\"" | sed 's/from_user://')
-   users[3]=$(echo "${tags[5]}" | tr -d "\"" | sed 's/from_user://')
+	for i in $(seq 1 $TWEETS); do
+		users[$i]=$(echo "${tags["$i*2-1"]}" | tr -d "\"" | sed 's/from_user://')
+   	tweets[$i]=$(echo "${tags["$i*2"]}" | sed 's/"text"://')
+	done
 
-	# Store tweets
-   tweets[1]=$(echo "${tags[2]}" | sed 's/"text"://')
-   tweets[2]=$(echo "${tags[4]}" | sed 's/"text"://')
-   tweets[3]=$(echo "${tags[6]}" | sed 's/"text"://')
-	
 	for j in $(seq 1 $TWEETS); do
 		echo "${users[$j]}: ${tweets[$j]}" | sed 's/u00e6/æ/g;s/u00c6/Æ/g;s/u00f8/ø/g;s/u00d8/Ø/g;s/u00e5/å/g;s/u00c5/Å/g' # Norwegian letters are fun..... Possible bugs with other languages
 	done
