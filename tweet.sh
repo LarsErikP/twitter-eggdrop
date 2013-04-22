@@ -11,7 +11,7 @@ function gettweet()   {			# Fetch either the nth, or the last tweet of a user
 	elif [ $# -eq 1 ]; then		# Requested the last tweet of a user
 		local t=$(wget -q -O - "http://api.twitter.com/1/statuses/user_timeline/${1}.xml?trim_user=true&count=10&include_rts=true" | xmlstarlet sel -t -v "//status[1]/text" 2> /dev/null)
 	fi 
-	echo $t
+	echo "$t"
 }
 
 function error()   {				# Print error message, and exit
@@ -72,7 +72,7 @@ if [[ $user =~ ^[^#].*$ ]]; then 														# The argument is NOT a # (so we'
 	if [ "$tweet" = "" ]; then																# Various errors handled. The requested tweet may not exist...
 		error "Could not find that tweet"
 	else																							# All good, print the tweet
-		echo $tweet | sed 's/&amp;lt;/</g' | sed 's/&amp;gt;/>/g'				# Fixing some HTML to ASCII
+		echo "$tweet" | sed 's/&amp;lt;/</g' | sed 's/&amp;gt;/>/g'				# Fixing some HTML to ASCII
 	fi
 else																								# Requested a hashtag
 	gethashtag $user
