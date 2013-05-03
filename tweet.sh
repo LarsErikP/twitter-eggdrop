@@ -16,7 +16,7 @@ function gettweet()   {			# Fetch either the nth, or the last tweet of a user
 
 function error()   {				# Print error message, and exit
  	echo $1
-	exit 1
+	exit 0
 }
 
 function userexist()   {		# Checks if the user exists
